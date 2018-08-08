@@ -1,12 +1,15 @@
 import * as React from 'react';
+import Member from "./Member"
 import './App.css';
 import { getStateInitials } from "./Helper"
+
 
 import logo from './logo.svg';
 
 interface IAppState {
   state: string,
   locationStatus: string,
+  senators: Member[],
 };
 
 class App extends React.Component<any, IAppState> {
@@ -17,6 +20,7 @@ class App extends React.Component<any, IAppState> {
     this.state = {
       locationStatus: "notFound",
       state: "None",
+      senators: []
     };
 
     this.getLocation = this.getLocation.bind(this);
@@ -31,8 +35,8 @@ class App extends React.Component<any, IAppState> {
         this.state = {
           locationStatus: "found",
           state: initials,
+          senators: []
         };
-        alert(initials);
       }
     }
   }
@@ -45,7 +49,6 @@ class App extends React.Component<any, IAppState> {
     const reverseGeocode: string = "https://us1.locationiq.com/v1/reverse.php?key=" + accessToken + "&lat="
                                   + latitudeString + "&lon=" + longitudeString + "&format=json"
 
-    alert(reverseGeocode);
     fetch(reverseGeocode)
       .then(response => response.json())
       .then(data => this.getLocation(data));
@@ -57,13 +60,13 @@ class App extends React.Component<any, IAppState> {
     this.setState({
       locationStatus: "notFound",
       state: "None",
+      senators: []
     });
   }
 
   public componentDidMount() {
     if ("geolocation" in navigator) {
       /* geolocation is available */
-      alert("available");
       navigator.geolocation.getCurrentPosition(this.success, this.error);
     } else {
       /* geolocation IS NOT available */
@@ -71,6 +74,7 @@ class App extends React.Component<any, IAppState> {
       this.setState({
         locationStatus: "notFound",
         state: "None",
+        senators: []
       });
     }
   }
