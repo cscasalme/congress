@@ -2,15 +2,12 @@ import * as React from 'react';
 import './Bill.css';
 
 interface IBillProps {
-  name: string,
-
+  title: string,
+  number: string,
+  active: boolean,
 }
 
-interface IBillState {
-
-}
-
-class Bill extends React.Component<IBillProps, IBillState> {
+class Bill extends React.Component<IBillProps, any> {
 
   constructor(props:any) {
     super(props);
@@ -19,11 +16,9 @@ class Bill extends React.Component<IBillProps, IBillState> {
 
   public render() {
     return (
-      <div className="Bill">
-
-      </div>
+      
     );
   }
 }
 
-export default Menu;
+export default Bill;

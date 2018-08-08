@@ -1,15 +1,15 @@
 import * as React from 'react';
-import Member from "./Member"
 import './App.css';
 import { getStateInitials } from "./Helper"
+import Member from "./Member"
 
 
 import logo from './logo.svg';
 
 interface IAppState {
-  state: string,
   locationStatus: string,
   senators: Member[],
+  state: string,
 };
 
 class App extends React.Component<any, IAppState> {
@@ -19,26 +19,53 @@ class App extends React.Component<any, IAppState> {
 
     this.state = {
       locationStatus: "notFound",
+      senators: [],
       state: "None",
-      senators: []
     };
 
-    this.getLocation = this.getLocation.bind(this);
-    this.success = this.success.bind(this);
     this.error = this.error.bind(this);
+    this.getLocation = this.getLocation.bind(this);
+    this.getSenators = this.getSenators.bind(this);
+    this.success = this.success.bind(this);
+    this.senatorFetch = this.senatorFetch.bind(this);
   }
 
   public getLocation(data: any) {
     if (data.address.country_code === "us") {
       const initials: string = getStateInitials(data.address.state);
-      if (initials !== "None") {
-        this.state = {
-          locationStatus: "found",
-          state: initials,
-          senators: []
-        };
-      }
+      this.senatorFetch(initials);
     }
+  }
+
+  public getSenators(initials: string, results: any) {
+    let senatorList: Member[];
+    senatorList = []
+
+    results.forEach((item: any) => {
+      senatorList.push(new Member({name: item.name, party: item.party, role: item.role, twitterId: item.twitter_id}))
+    });
+
+    this.setState({
+      locationStatus: "found",
+      senators: senatorList,
+      state: initials,
+    });
+  }
+
+  public senatorFetch(initials: string) {
+    let senatorFetch: string = "https://api.propublica.org/congress/v1/members/senate/";
+    senatorFetch = senatorFetch + initials;
+    senatorFetch = senatorFetch + "/current.json";
+    fetch(senatorFetch, {
+      headers: {
+        "X-Api-Key": "ghDkIyyWKGxVEdolv8EFlYaoOXcn8iVvC4zdhw9J"
+      },
+      method: "GET"
+    })
+      .then(response => response.json())
+      .then(data => this.getSenators(initials, data.results));
+
+
   }
 
   public success(position: any) {
@@ -59,8 +86,8 @@ class App extends React.Component<any, IAppState> {
     alert('An error has occured while retrieving location');
     this.setState({
       locationStatus: "notFound",
+      senators: [],
       state: "None",
-      senators: []
     });
   }
 
@@ -73,8 +100,8 @@ class App extends React.Component<any, IAppState> {
       alert("Sorry, Congress does not work on this browser. :(");
       this.setState({
         locationStatus: "notFound",
+        senators: [],
         state: "None",
-        senators: []
       });
     }
   }
@@ -86,8 +113,18 @@ class App extends React.Component<any, IAppState> {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.tsx</code> and save to reload.
+        <p className="Senators">
+          <h1> Your Senators </h1>
+          <div className="SenatorList">
+            {this.state.senators.map((senator) => (
+              <div key={senator.props.name} className="Senator">
+                <Member name={senator.props.name}
+                  party={senator.props.party}
+                  role={senator.props.role}
+                  twitterId={senator.props.twitterId}/>
+              </div>
+            ))}
+          </div>
         </p>
       </div>
     );
