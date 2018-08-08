@@ -4,7 +4,7 @@ import { getStateInitials } from "./Helper"
 import Member from "./Member"
 
 
-import logo from './logo.svg';
+import logo from './assets/capitol-building-white-128.png';
 
 interface IAppState {
   locationStatus: string,
@@ -111,7 +111,7 @@ class App extends React.Component<any, IAppState> {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
+          <h1 className="App-title">Congress</h1>
         </header>
         <p className="Senators">
           <h1> Your Senators </h1>
@@ -126,6 +126,18 @@ class App extends React.Component<any, IAppState> {
             ))}
           </div>
         </p>
+        <footer>
+          <div>
+            <p>
+            Icons made by
+            <a href="http://www.freepik.com" title="Freepik"> Freepik </a>
+             from
+            <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com </a>
+             is licensed by
+            <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank"> CC 3.0 BY </a>
+          </p>
+          </div>
+        </footer>
       </div>
     );
   }
