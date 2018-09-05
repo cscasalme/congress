@@ -1,10 +1,10 @@
 import * as React from 'react';
-import './Bill.css';
+// import './Bill.css';
 
 interface IBillProps {
-  title: string,
+  link: string,
   number: string,
-  active: boolean,
+  title: string,
 }
 
 class Bill extends React.Component<IBillProps, any> {
@@ -16,7 +16,10 @@ class Bill extends React.Component<IBillProps, any> {
 
   public render() {
     return (
-      
+      <div className = "Bill">
+        <h5>{<a href={this.props.link}>{this.props.number}</a>} {this.props.title}</h5>
+
+      </div>
     );
   }
 }
